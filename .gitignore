@@ -3,6 +3,7 @@
 #--------------------------------------------------#
 # Gitignore for the following technologies: Python
 
+logs/*
 *.zip
 *.csv
 lightning_logs/*

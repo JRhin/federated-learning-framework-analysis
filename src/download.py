@@ -18,7 +18,7 @@ def main():
     with zipfile.ZipFile(str(zip_path),"r") as zip_ref:
         zip_ref.extractall(data_path)
 
-zip_path.unlink()
+    zip_path.unlink()
 
 if __name__ == "__main__":
     main()
