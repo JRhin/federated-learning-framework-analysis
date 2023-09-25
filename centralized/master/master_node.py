@@ -43,4 +43,4 @@ if __name__ == "__main__":
     central_model = 6#LogisticRegression(10, 1)
 
     logger.info("Starting the master node.")
-    app.run(debug=True)
+    app.run(debug=True, host='192.168.92.20', port=80)

@@ -18,8 +18,7 @@ def send_weights(state_dict,
 
 if __name__ == "__main__":
 
-    pass
-url = "http://192.168.92.20:8081"
+    url = "http://192.168.92.20:80"
 
     # Get the model
     response = subscribe(url)
