@@ -1,13 +1,13 @@
 import json
 import requests
-from model import LogisticRegression
+#from model import LogisticRegression
 
-def get_model(url: str) -> LogisticRegression:
+def subscribe(url: str):
 
-    response = requests.get(f'{url}/get-model')
+    response = requests.get(f'{url}/subscribe')
 
-    model = LogisticRegression(10, 1)
-    return model
+    model = 1 #LogisticRegression(10, 1)
+    return response
 
 def send_weights(state_dict,
                  obs: int) -> None:
@@ -18,13 +18,15 @@ def send_weights(state_dict,
 
 if __name__ == "__main__":
 
-    url = "http://127.0.0.1:5000"
+    pass
+url = "http://192.168.92.20:8081"
 
     # Get the model
-    model = get_model(url)
+    response = subscribe(url)
     
+    print(response)
     # Train
     # ...
 
     # Send the weigths
-    send_weights(model.state_dict(), 3)
+    #send_weights(model.state_dict(), 3)

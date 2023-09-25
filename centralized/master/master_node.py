@@ -3,30 +3,18 @@ import logging
 import numpy as np
 from pathlib import Path
 from flask import Flask, request, jsonify
-from model import LogisticRegression
+#from model import LogisticRegression
 
 app = Flask(__name__)
 
-@app.route("/get-model", methods=["GET"])
-def get_model():
+@app.route("/subscribe", methods=["GET"])
+def subscribe():
     global n_clients 
     global central_model
+    id_client = n_clients
     n_clients += 1
     logger.info(f"A client asked the model, {n_clients} clients active.")
-
-    model_schema = []
-    
-    for name, module in central_model.named_children():
-        layer_info = {
-                    'type': module.__class__.__name__,
-                    'parameters': [p for p in module.parameters()]
-                }
-        model_schema.append(layer_info)
-
-    print(str(central_model))
-    print(model_schema)
-
-    return jsonify({'model_schema': model_schema}), 200
+    return jsonify({'id_client': id_client}), 200
 
 
 @app.route("/push-weights", methods=["POST"])
@@ -52,7 +40,7 @@ if __name__ == "__main__":
     logger = logging.getLogger()
 
     n_clients =  0
-    central_model = LogisticRegression(10, 1)
+    central_model = 6#LogisticRegression(10, 1)
 
     logger.info("Starting the master node.")
     app.run(debug=True)
