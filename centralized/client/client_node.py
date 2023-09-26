@@ -18,12 +18,17 @@ def send_weights(state_dict,
 
 if __name__ == "__main__":
 
-    url = "http://192.168.92.20:80"
+    url = "http://master"
 
     # Get the model
+
+    #while True:
+    #    pass
+
+
     response = subscribe(url)
     
-    print(response)
+    print(response.text, "DONE")
     # Train
     # ...
 

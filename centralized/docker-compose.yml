@@ -1,0 +1,20 @@
+version: '3'
+services:
+  master:
+    image: master-node
+    ports:
+      - "80:80"
+    networks:
+      - my_network
+
+  client:
+    image: client-node
+    deploy:
+      replicas: 3
+    depends_on:
+      - master
+    networks:
+      - my_network
+
+networks:
+  my_network:
