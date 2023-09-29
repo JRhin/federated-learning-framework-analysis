@@ -9,12 +9,20 @@ services:
 
   client:
     image: client-node
-    deploy:
-      replicas: 3
     depends_on:
       - master
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - common_data:/app/data
     networks:
       - my_network
 
 networks:
   my_network:
+
+volumes:
+  common_data:
+    name: common_data
