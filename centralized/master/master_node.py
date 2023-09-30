@@ -10,7 +10,6 @@ app = Flask(__name__)
 @app.route("/subscribe", methods=["GET"])
 def subscribe():
     global n_clients 
-    global central_model
     id_client = n_clients
     n_clients += 1
     logger.info(f"A client asked the model, {n_clients} clients active.")

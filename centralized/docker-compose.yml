@@ -12,7 +12,7 @@ services:
     depends_on:
       - master
     deploy:
-      replicas: 3
+      replicas: 0
       restart_policy:
         condition: on-failure
     volumes:
