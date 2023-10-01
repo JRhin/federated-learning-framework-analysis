@@ -1,40 +1,64 @@
 import json
+import logging
 import requests
 import polars as pl
 from pathlib import Path
-#from model import LogisticRegression
+from model import LogisticRegression
 
 def subscribe(url: str):
-
     response = requests.get(f'{url}/subscribe')
+    id_client = response.json()['id_client']
+    logger.info(f"Subcribed to the Master Node. ID client assigned {id_client}.")
+    return id_client
 
-    model = 1 #LogisticRegression(10, 1)
-    return model, response
+def preprocessing(data: pl.DataFrame):
+    logger.info("Preprocessing performed.")
+    return data
 
-def send_weights(state_dict,
+def send_weights(url: str,
+                 state_dict,
                  obs: int) -> None:
-    state_dict_json = {key: value.numpy().tolist() for key, value in state_dict.items()}
-    return state_dict_json#json.dumps(state_dict_json)
+    url = f'{url}/push-weights'
+    state_dict_json = json.dumps({key: value.numpy().tolist() for key, value in state_dict.items()})
+    response = requests.post(url, json={'model_state_dict': state_dict_json, 'obs': obs})
+    logger.info("Weigths sent.")
+    return response.status_code
 
 
 
 if __name__ == "__main__":
 
     current = Path(".")
+    logs = current/"logs"
     data_path = current/"data"
     url = "http://master"
 
-    # Get the model
-    model, response = subscribe(url)
+    # Logging stuff
+    logs.mkdir(exist_ok=True)
+    logging.basicConfig(filename=logs/"client_node.logs", level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s', filemode='w')
+    logger = logging.getLogger()
 
-    id_client = response.json()['id_client']
+
+    # Subscribe to the Master Node
+    id_client = subscribe(url)
 
     df = pl.read_csv(data_path/f"hospital_{id_client}.csv")
-    print(df)
+
+    # Preprocessing
+    df = preprocessing(df)
+
+    obs, features = df.shape
+    features -= 1
+
+    # Get the model
+    model = LogisticRegression(features, 1)
+
+    print(model)
     
     
     # Train
     # ...
 
     # Send the weigths
-    #send_weights(model.state_dict(), 3)
+    status = send_weights(url, model.state_dict(), obs)
+    print(status)

@@ -7,10 +7,10 @@ echo -e '\n\nDownload and partitioning the data...'
 python ./src/download.py
 
 echo -e "\n\nCreating the master-node image..."
-docker build -t master-node ./master
+docker build -t master-node ./master --rm
 
 echo -e "\n\nCreating the client-node image..."
-docker build -t client-node ./client
+docker build -t client-node ./client --rm
 
 echo -e '\n\nInitializing a Swarm'
 docker swarm init

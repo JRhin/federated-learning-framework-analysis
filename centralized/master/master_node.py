@@ -3,7 +3,7 @@ import logging
 import numpy as np
 from pathlib import Path
 from flask import Flask, request, jsonify
-#from model import LogisticRegression
+from model import LogisticRegression
 
 app = Flask(__name__)
 
@@ -20,8 +20,11 @@ def subscribe():
 def push_weights():
     global n_clients
     n_clients -= 1
+    data = request.json
+    state_dict_json = data['model_state_dict']
+    obs = data['obs']
     logger.info(f'A client pushed the weights, {n_clients} clients active.')
-    pass
+    return state_dict_json, obs
 
 
 
@@ -39,7 +42,7 @@ if __name__ == "__main__":
     logger = logging.getLogger()
 
     n_clients =  0
-    central_model = 6#LogisticRegression(10, 1)
+    central_model = LogisticRegression(83, 1)
 
     logger.info("Starting the master node.")
     app.run(debug=True, host='0.0.0.0', port=80)
