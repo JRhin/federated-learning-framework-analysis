@@ -1,14 +1,14 @@
 version: '3'
 services:
   master:
-    image: master-node
+    image: master-node:latest
     ports:
       - "80:80"
     networks:
       - my_network
 
   client:
-    image: client-node
+    image: client-node:latest
     depends_on:
       - master
     deploy:
@@ -25,4 +25,3 @@ networks:
 
 volumes:
   common_data:
-    name: common_data
