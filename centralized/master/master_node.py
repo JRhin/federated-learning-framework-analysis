@@ -10,7 +10,8 @@ app = Flask(__name__)
 @app.route("/subscribe", methods=["GET"])
 def subscribe():
     global n_clients 
-    id_client = n_clients
+    global id_client
+    id_client += 1
     n_clients += 1
     logger.info(f"A client asked the model, {n_clients} clients active.")
     return jsonify({'id_client': id_client}), 200
@@ -18,14 +19,18 @@ def subscribe():
 
 @app.route("/push-weights", methods=["POST"])
 def push_weights():
-    global n_clients
-    n_clients -= 1
-    data = request.json
-    state_dict_json = data['model_state_dict']
-    obs = data['obs']
-    logger.info(f'A client pushed the weights, {n_clients} clients active.')
-    return state_dict_json, obs
-
+    try:
+        global n_clients
+        n_clients -= 1
+        logger.info(request.json)
+        data = request.json
+        state_dict_json = data['model_state_dict']
+        obs = data['obs']
+        id_client = data['id_client']
+        logger.info(f'A client pushed the weights, {n_clients} clients active.')
+        return f"State dict arrived from {id_client}.", 200
+    except Exception as e:
+        return f"Error: {str(e)}", 400
 
 
 
@@ -42,6 +47,7 @@ if __name__ == "__main__":
     logger = logging.getLogger()
 
     n_clients =  0
+    id_client = -1
     central_model = LogisticRegression(83, 1)
 
     logger.info("Starting the master node.")

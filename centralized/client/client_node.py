@@ -17,10 +17,11 @@ def preprocessing(data: pl.DataFrame):
 
 def send_weights(url: str,
                  state_dict,
-                 obs: int) -> None:
+                 obs: int,
+                 id_client: int) -> None:
     url = f'{url}/push-weights'
     state_dict_json = json.dumps({key: value.numpy().tolist() for key, value in state_dict.items()})
-    response = requests.post(url, json={'model_state_dict': state_dict_json, 'obs': obs})
+    response = requests.post(url, json={'model_state_dict': state_dict_json, 'obs': obs, 'id_client': id_client})
     logger.info("Weigths sent.")
     return response.status_code
 
@@ -53,12 +54,12 @@ if __name__ == "__main__":
     # Get the model
     model = LogisticRegression(features, 1)
 
-    print(model)
+    print(id_client)
     
     
     # Train
     # ...
 
     # Send the weigths
-    status = send_weights(url, model.state_dict(), obs)
+    status = send_weights(url, model.state_dict(), obs, id_client)
     print(status)
