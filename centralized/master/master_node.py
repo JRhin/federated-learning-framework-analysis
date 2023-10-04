@@ -22,7 +22,6 @@ def push_weights():
     try:
         global n_clients
         n_clients -= 1
-        logger.info(request.json)
         data = request.json
         state_dict_json = data['model_state_dict']
         obs = data['obs']
@@ -48,7 +47,7 @@ if __name__ == "__main__":
 
     n_clients =  0
     id_client = -1
-    central_model = LogisticRegression(83, 1)
+    central_model = LogisticRegression(114, 1)
 
     logger.info("Starting the master node.")
     app.run(debug=True, host='0.0.0.0', port=80)

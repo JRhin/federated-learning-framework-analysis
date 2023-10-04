@@ -11,9 +11,6 @@ def subscribe(url: str):
     logger.info(f"Subcribed to the Master Node. ID client assigned {id_client}.")
     return id_client
 
-def preprocessing(data: pl.DataFrame):
-    logger.info("Preprocessing performed.")
-    return data
 
 def send_weights(url: str,
                  state_dict,
@@ -45,9 +42,6 @@ if __name__ == "__main__":
 
     df = pl.read_csv(data_path/f"hospital_{id_client}.csv")
 
-    # Preprocessing
-    df = preprocessing(df)
-
     obs, features = df.shape
     features -= 1
 
@@ -55,6 +49,7 @@ if __name__ == "__main__":
     model = LogisticRegression(features, 1)
 
     print(id_client)
+    print(df)
     
     
     # Train
