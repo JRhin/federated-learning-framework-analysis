@@ -3,59 +3,13 @@ import requests
 import polars as pl
 from pathlib import Path
 from model import LogisticRegression
+from machine_learning import *
 
 def subscribe(url: str):
     response = requests.get(f'{url}/subscribe')
     id_client = response.json()['id_client']
     logger.info(f"Subcribed to the Master Node. ID client assigned {id_client}.")
     return id_client
-
-
-def preprocessing(data: pl.DataFrame):
-    logger.info("Start preprocessing...")
-    data = data.drop(['encounter_id', 'icu_d', 'icu_stay_type', 'patient_id'])
-
-    numerical_cat = [
-        'elective_surgery',
-        'apache_post_operative',
-        'arf_apache',
-        'gcs_unable_apache',
-        'intubated_apache',
-        'ventilated_apache',
-        'aids',
-        'cirrhosis',
-        'diabetes_mellitus',
-        'hepatic_failure',
-        'immunosuppression',
-        'leukemia',
-        'lymphoma',
-        'solid_tumor_with_metastasis']
-
-    categorical = [
-        'ethnicity',
-        'gender',
-        'icu_admit_source',
-        'icu_type',
-        'apache_3j_bodysystem',
-        'apache_2_bodysystem']
-
-    numeric_only = list(set(data.columns)-set(numerical_cat + categorical+['hospital_death', 'hospital_id']))
-
-    # Subsitute the missing values:
-    #  - categorical: mode
-    #  - numerical: median
-    data = data.with_columns(
-            [pl.col(col).fill_null(data.get_column(col).mode().item()) for col in numerical_cat + categorical] +
-            [pl.col(col).fill_null(pl.median(col)) for col in numeric_only]
-            )
-
-    data = data.with_columns(
-            pl.col('gender').map_dict({'M':0, 'F':1})
-            )
-
-    categorical.remove('gender')
-    data = data.to_dummies(columns=categorical, separator=':')
-    return data
 
 
 def send_weights(id_client: int,
@@ -82,6 +36,7 @@ def send_weights(id_client: int,
 
 if __name__ == "__main__":
 
+    seed = 42
     current = Path(".")
     logs = current/"logs"
     data_path = current/"data"
@@ -96,27 +51,24 @@ if __name__ == "__main__":
     # Subscribe to the Master Node
     id_client = subscribe(url)
 
-    df = pl.read_csv(data_path/f"hospital_{id_client}.csv")
+    datamodule = DataModule(data_path, id_client=id_client, num_workers=12)
+    datamodule.setup(seed=seed)
 
-    # Preprocess the data
-    df = preprocessing(df)
-    logger.info("Done preprocessing.")
+    model = LogisticRegression(datamodule.n_features)
+    clf = Classifier(model, lr=1e-1)
 
-    obs, features = df.shape
-    features -= 1
+    # Training
+    trainer = lg.Trainer(max_epochs=30)
+    trainer.fit(clf, datamodule=datamodule)
 
-    # Get the model
-    model = LogisticRegression(features, 1)
+    # Test
+    trainer.test(ckpt_path='best', datamodule=datamodule)
 
-    # Train
-    # ...
 
     # Send the weigths
-    columns = df.columns
-    columns.remove('hospital_death')
     status = send_weights(id_client,
-                          obs,
+                          datamodule.obs,
                           model.state_dict(),
-                          columns,
+                          datamodule.features,
                           url)
     print(status)

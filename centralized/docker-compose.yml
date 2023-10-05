@@ -2,6 +2,8 @@ version: '3'
 services:
   master:
     image: master-node:latest
+    environment:
+      - CLIENTS=0
     ports:
       - "80:80"
     networks:

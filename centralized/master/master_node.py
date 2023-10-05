@@ -1,3 +1,4 @@
+import os
 import logging
 import numpy as np
 from pathlib import Path
@@ -46,11 +47,9 @@ class BayesianBootstrap:
 
 @app.route("/subscribe", methods=["GET"])
 def subscribe():
-    global n_clients 
     global id_client
     id_client += 1
-    n_clients += 1
-    logger.info(f"A client asked the model, {n_clients} clients active.")
+    logger.info(f"A client asked the model, client {id_client} has started.")
     return jsonify({'id_client': id_client}), 200
 
 
@@ -72,17 +71,19 @@ def push_weights():
             weights[weight]['value'].append(state_dict_json['linear.weight'][weight])
             weights[weight]['obs'].append(obs)
 
-
         weights['linear.bias']['value'].append(state_dict_json['linear.bias'])
         weights['linear.bias']['obs'].append(obs)
 
-        logger.info(f'A client pushed the weights, {n_clients} clients active.')
+        logger.info(f'A client pushed the weights, client {id_client} has ended: {n_clients} clients active.')
 
-        for weight in weights:
-            final_weights[weight] = boot.sample(np.array(weights[weight]['value']), np.array(weights[weight]['obs']))
+        if n_clients == 0:
+            for weight in weights:
+                final_weights[weight] = boot.sample(np.array(weights[weight]['value']), np.array(weights[weight]['obs']))
 
-        logger.info(final_weights)
+            logger.info(final_weights)
+
         return f"State dict arrived from {id_client}.", 200
+
     except Exception as e:
         logger.error(f"Error: {str(e)}")
         return f"Error: {str(e)}", 400
@@ -101,7 +102,7 @@ if __name__ == "__main__":
 
     logger = logging.getLogger()
 
-    n_clients =  0
+    n_clients =  int(os.environ['CLIENTS'])
     id_client = -1
 
     def def_value():
