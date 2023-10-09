@@ -176,7 +176,10 @@ class Classifier(lg.LightningModule):
 
         criterion = nn.BCEWithLogitsLoss()
         loss = criterion(y_hat, y)
+        acc = (y_hat == y).sum().item() / y.size(0)
+
         self.log("training_loss", loss)
+        self.log("training_acc", acc)
         return loss
 
 
@@ -188,8 +191,10 @@ class Classifier(lg.LightningModule):
 
         criterion = nn.BCEWithLogitsLoss()
         test_loss = criterion(y_hat, y)
+        test_acc = (y_hat == y).sum().item() / y.size(0)
 
         self.log("test_loss", test_loss)
+        self.log("test_acc", test_acc)
         return test_loss
 
 
@@ -201,7 +206,10 @@ class Classifier(lg.LightningModule):
 
         criterion = nn.BCEWithLogitsLoss()
         val_loss = criterion(y_hat, y)
+        val_acc = (y_hat == y).sum().item() / y.size(0)
+
         self.log("val_loss", val_loss, prog_bar=True, on_step=False, on_epoch=True)
+        self.log("val_lacc", val_acc, prog_bar=True, on_step=False, on_epoch=True)
         return val_loss
 
 

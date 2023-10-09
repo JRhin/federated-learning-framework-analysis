@@ -8,4 +8,5 @@ Then to run, just:
 
 ```bash
 .\run.sh
+python main.py
 ```
