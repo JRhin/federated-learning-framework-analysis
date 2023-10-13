@@ -1,6 +1,24 @@
 import os
 
 if __name__ == "__main__":
-    clients = 10
-    os.system(f'docker service update --env-add CLIENTS={clients} my_stack_master')
-    os.system(f'docker service scale my_stack_client={clients}')
+    import argparse
+
+    description = """
+    In this python file we perform a simulation by increasing the number of clients that subscribe to the master node.
+
+    To check the available parameters just run `python main.py -h`. 
+    """
+
+    parser = argparse.ArgumentParser(description=description,
+                                    formatter_class=argparse.RawTextHelpFormatter)
+
+    parser.add_argument('-c',
+                        '--clients',
+                        help='The number of maximum clients. Default 10.',
+                        default=10,
+                        type=int)
+    args = parser.parse_args()
+    
+    for clients in range(1, args.clients+1):
+        os.system(f'docker service update --env-add CLIENTS={clients} my_stack_master')
+        os.system(f'docker service scale my_stack_client={clients}')
