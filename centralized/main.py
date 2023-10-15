@@ -19,5 +19,5 @@ if __name__ == "__main__":
                         type=int)
     args = parser.parse_args()
     
-    os.system(f'docker service update --env-add CLIENTS={clients} my_stack_master')
-    os.system(f'docker service scale my_stack_client={clients}')
+    os.system(f'docker service update --env-add CLIENTS={arg.clients} my_stack_master')
+    os.system(f'docker service scale my_stack_client={args.clients}')
