@@ -7,6 +7,7 @@ logs/*
 *.zip
 *.csv
 lightning_logs/*
+*/*.pem
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

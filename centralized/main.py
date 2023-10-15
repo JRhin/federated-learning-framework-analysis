@@ -4,7 +4,7 @@ if __name__ == "__main__":
     import argparse
 
     description = """
-    In this python file we perform a simulation by increasing the number of clients that subscribe to the master node.
+    In this python file we perform a simulation by creating the passed number of clients that are going to subscribe to the master node.
 
     To check the available parameters just run `python main.py -h`. 
     """
@@ -19,6 +19,5 @@ if __name__ == "__main__":
                         type=int)
     args = parser.parse_args()
     
-    for clients in range(1, args.clients+1):
-        os.system(f'docker service update --env-add CLIENTS={clients} my_stack_master')
-        os.system(f'docker service scale my_stack_client={clients}')
+    os.system(f'docker service update --env-add CLIENTS={clients} my_stack_master')
+    os.system(f'docker service scale my_stack_client={clients}')
