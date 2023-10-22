@@ -13,6 +13,7 @@ import lightning.pytorch as lg
 from model import LogisticRegression
 from torch.utils.data import Dataset, DataLoader
 from torch.utils.data.dataset import random_split
+from torchmetrics.classification import BinaryAccuracy
 
 # ===================================
 #               Classes
@@ -175,8 +176,9 @@ class Classifier(lg.LightningModule):
         y_hat = self.model(x).squeeze(dim=1)
 
         criterion = nn.BCEWithLogitsLoss()
+        accuracy_function = BinaryAccuracy()
         loss = criterion(y_hat, y)
-        acc = (y_hat == y).sum().item() / y.size(0)
+        acc = accuracy_function(y_hat, y)#(y_hat == y).sum().item() / y.size(0)
 
         self.log("training_loss", loss)
         self.log("training_acc", acc)
@@ -190,8 +192,9 @@ class Classifier(lg.LightningModule):
         y_hat = self.model(x).squeeze(dim=1)
 
         criterion = nn.BCEWithLogitsLoss()
+        accuracy_function = BinaryAccuracy()
         test_loss = criterion(y_hat, y)
-        test_acc = (y_hat == y).sum().item() / y.size(0)
+        test_acc = accuracy_function(y_hat, y)#(y_hat == y).sum().item() / y.size(0)
 
         self.log("test_loss", test_loss)
         self.log("test_acc", test_acc)
@@ -205,8 +208,9 @@ class Classifier(lg.LightningModule):
         y_hat = self.model(x).squeeze(dim=1)
 
         criterion = nn.BCEWithLogitsLoss()
+        accuracy_function = BinaryAccuracy()
         val_loss = criterion(y_hat, y)
-        val_acc = (y_hat == y).sum().item() / y.size(0)
+        val_acc = accuracy_function(y_hat, y)#(y_hat == y).sum().item() / y.size(0)
 
         self.log("val_loss", val_loss, prog_bar=True, on_step=False, on_epoch=True)
         self.log("val_lacc", val_acc, prog_bar=True, on_step=False, on_epoch=True)
