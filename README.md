@@ -1,5 +1,10 @@
 # Federated Learning Framework Analysis
 
- docker swarm init --advertise-addr 192.168.99.100
+This study explores two distinct implementations of Federated Learning, specifically Centralized Federated Learning and Multi-Master Federated Learning, applied to a dataset of hospital data for predicting the outcomes of individuals affected by diabetes.
 
- docker stack deploy -c docker-compose.yml my_stack
+The repo contains a folder:
+- code : It contains all the scripts used to build our architecures using docker and to execute the task
+
+The dataset is taken from kaggle:
+https://www.kaggle.com/datasets/mitishaagarwal/patient
+
