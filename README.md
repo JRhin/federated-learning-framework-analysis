@@ -2,16 +2,28 @@
 
 This study explores two distinct implementations of Federated Learning, specifically Centralized Federated Learning and Multi-Master Federated Learning, applied to a dataset of hospital data for predicting the outcomes of individuals affected by diabetes.
 
-The repo contains:
-- code : a folder that contains all the scripts used to build our architecures using docker and to execute the task
-- CLC_presentation_Grieco_Pandolfo_Vigneri.pdf : it is the presentation for the project of Cloud Computing
-- CLC_report_Grieco_Pandolfo_Vigneri.pdf : the report of the project with teh description and the analysis on the problem
+# Dataset
 
-The dataset is taken from kaggle:
+![dataset.png](./img/dataset.png)
 
 https://www.kaggle.com/datasets/mitishaagarwal/patient
 
+# Directory Structure
 
-Authors:
+```bash
+./root
+|_ img/
+|_ code/
+|_ presentation.pdf
+|_ report.pdf
+```
 
-Nicola Grieco, Mario Edoardo Pandolfo, Davide Vigneri
+In the `code/` directory you'll find all the needed code to run the simulation for both the Centralized and Multi-Master Federated Learning.
+
+In the main directory you can find `report.pdf` in which we describe and discuss about the problem, the solution and the implementation of this one. There is also the `presentation.pdf` which is a pack of slides based on the report.
+
+# Team
+
+- [Mario Edoardo Pandolfo](https://github.com/JRhin)
+- [Nicola Grieco](https://github.com/nicolagrieco00)
+- [Davide Vigneri](https://github.com/VigneriDavide)
