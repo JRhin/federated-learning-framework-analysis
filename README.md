@@ -4,6 +4,10 @@ This study explores two distinct implementations of Federated Learning, specific
 
 ![federated approaches](./img/federated_approaches.svg)
 
+## Requirements
+
+This project requires Docker to be installed in your system. To install it follow the [guide](https://docs.docker.com/engine/install/) in the main site.
+
 ## Dataset
 
 ![dataset.png](./img/dataset.png)
@@ -23,6 +27,11 @@ The dataset was taken from Kaggle ([link here](https://www.kaggle.com/datasets/m
 In the `code/` directory you'll find all the needed code to run the simulation for both the Centralized and Multi-Master Federated Learning.
 
 In the main directory you can find `report.pdf` in which we describe and discuss about the problem, the solution and the implementation of this one. There is also the `presentation.pdf` which is a pack of slides based on the report.
+
+## Used technologies
+
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)
 
 ## Team
 
