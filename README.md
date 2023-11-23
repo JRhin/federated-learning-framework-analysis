@@ -1,12 +1,14 @@
 # Federated Learning Framework Analysis
 
-This study explores two distinct implementations of Federated Learning, specifically Centralized Federated Learning and Multi-Master Federated Learning, applied to a dataset of hospital data for predicting the outcomes of individuals affected by diabetes.
+This study explores two distinct implementations of Federated Learning, specifically Centralized Federated Learning and Multi-Master Federated Learning.
+
+![federated approaches](./img/federated_approaches.svg)
 
 # Dataset
 
 ![dataset.png](./img/dataset.png)
 
-https://www.kaggle.com/datasets/mitishaagarwal/patient
+The dataset was taken from Kaggle ([link here](https://www.kaggle.com/datasets/mitishaagarwal/patient)) and it's about hospital data for predicting the outcomes of individuals affected by diabetes.
 
 # Directory Structure
 
